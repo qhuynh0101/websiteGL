@@ -64,24 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- ## DYNAMIC CONTENT POPULATION ## ---
-    const servicesData = [
-        { icon: '🧹', title_key: 'service1_title', desc_key: 'service1_desc' },
-        { icon: '✨', title_key: 'service2_title', desc_key: 'service2_desc' },
-        { icon: '🏢', title_key: 'service3_title', desc_key: 'service3_desc' }
-    ];
-    const testimonialsData = [
-        { text_key: 'testimonial1_text', author_key: 'testimonial1_author', stars: 5, featured: true },
-        { text_key: 'testimonial2_text', author_key: 'testimonial2_author', stars: 5, featured: false },
-        { text_key: 'testimonial3_text', author_key: 'testimonial3_author', stars: 5, featured: false }
-    ];
+    const servicesData = [ { icon: '🧹', title_key: 'service1_title', desc_key: 'service1_desc' }, { icon: '✨', title_key: 'service2_title', desc_key: 'service2_desc' }, { icon: '🏢', title_key: 'service3_title', desc_key: 'service3_desc' } ];
+    const testimonialsData = [ { text_key: 'testimonial1_text', author_key: 'testimonial1_author', stars: 5, featured: true }, { text_key: 'testimonial2_text', author_key: 'testimonial2_author', stars: 5, featured: false }, { text_key: 'testimonial3_text', author_key: 'testimonial3_author', stars: 5, featured: false } ];
     const servicesContainer = document.querySelector('.services-container');
-    if (servicesContainer) {
-        servicesContainer.innerHTML = servicesData.map(s => `<div class="service-card animate-on-scroll"><div class="service-icon">${s.icon}</div><h3 data-key="${s.title_key}"></h3><p data-key="${s.desc_key}"></p></div>`).join('');
-    }
+    if (servicesContainer) { servicesContainer.innerHTML = servicesData.map(s => `<div class="service-card animate-on-scroll"><div class="service-icon">${s.icon}</div><h3 data-key="${s.title_key}"></h3><p data-key="${s.desc_key}"></p></div>`).join(''); }
     const testimonialTrack = document.querySelector('.testimonial-carousel-track');
-    if (testimonialTrack) {
-        testimonialTrack.innerHTML = testimonialsData.map(t => `<div class="testimonial-card"><div class="testimonial-header"><div class="star-rating">${'★'.repeat(t.stars)}${'☆'.repeat(5 - t.stars)}</div>${t.featured ? `<div class="featured-tag" data-key="featured_tag"></div>` : ''}</div><p class="testimonial-text" data-key="${t.text_key}"></p><p class="testimonial-author" data-key="${t.author_key}"></p></div>`).join('');
-    }
+    if (testimonialTrack) { testimonialTrack.innerHTML = testimonialsData.map(t => `<div class="testimonial-card"><div class="testimonial-header"><div class="star-rating">${'★'.repeat(t.stars)}${'☆'.repeat(5 - t.stars)}</div>${t.featured ? `<div class="featured-tag" data-key="featured_tag"></div>` : ''}</div><p class="testimonial-text" data-key="${t.text_key}"></p><p class="testimonial-author" data-key="${t.author_key}"></p></div>`).join(''); }
 
     // --- ## CORE LOGIC & ANIMATIONS ## ---
     
@@ -89,52 +77,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const typingHeadline = document.getElementById('typing-headline');
     function typeWriter(element, text, i = 0) {
         if (!element) return;
-        if (i === 0) { element.innerHTML = ''; } // Xóa nội dung cũ trước khi gõ
+        if (i === 0) { element.innerHTML = ''; }
         element.innerHTML = text.substring(0, i) + '<span aria-hidden="true">|</span>';
         if (i < text.length) {
             setTimeout(() => typeWriter(element, text, i + 1), 70);
         } else {
-             element.querySelector('span').style.display = 'none';
+             if (element.querySelector('span')) {
+                element.querySelector('span').style.display = 'none';
+             }
         }
     }
 
     // --- Language Switcher Logic ---
-    const langDropdownContainer = document.querySelector('.language-dropdown');
-    const langDropdownMobileContainer = document.querySelector('.language-dropdown-mobile');
-    
-    // Sao chép dropdown ngôn ngữ vào trong menu di động
-    if (langDropdownContainer && langDropdownMobileContainer) {
-         langDropdownMobileContainer.appendChild(langDropdownContainer.cloneNode(true));
-    }
-
+    const mainLangDropdown = document.querySelector('.nav-right .language-dropdown');
     function setupLangSwitcher(container) {
-        const langDropdown = container.querySelector('.language-dropdown');
-        if (!langDropdown) return;
-        
-        const langOptions = langDropdown.querySelector('.language-options');
-        const langButton = langDropdown.querySelector('.language-selected');
-
+        if (!container) return;
+        const langOptions = container.querySelector('.language-options');
+        const langButton = container.querySelector('.language-selected');
+        if (!langButton || !langOptions) return;
         langButton.addEventListener('click', e => { 
-            e.stopPropagation(); 
+            e.stopPropagation();
             langOptions.style.display = langOptions.style.display === 'block' ? 'none' : 'block';
         });
     }
-
-    document.querySelectorAll('.language-dropdown').forEach(setupLangSwitcher);
+    setupLangSwitcher(mainLangDropdown);
     document.addEventListener('click', () => {
         document.querySelectorAll('.language-options').forEach(options => options.style.display = 'none');
     });
-    
+
     window.setLanguage = function(lang) {
         if (!translations[lang]) lang = 'en';
         document.documentElement.lang = lang;
-        
+        const langNameMap = { 'en': 'English', 'vi': 'Tiếng Việt', 'ko': '한국어', 'zh': '中文', 'es': 'Español'};
         document.querySelectorAll('.language-selected span').forEach(span => {
-            const langName = translations[lang]['nav_home'] ? lang.toUpperCase() : 'English'; // Lấy tên ngôn ngữ hoặc mặc định
-             const langNameMap = { 'en': 'English', 'vi': 'Tiếng Việt', 'ko': '한국어', 'zh': '中文', 'es': 'Español'};
              span.textContent = langNameMap[lang] || 'English';
         });
-
         document.querySelectorAll('[data-key]').forEach(elem => {
             const key = elem.getAttribute('data-key');
             if (translations[lang] && translations[lang][key]) elem.innerHTML = translations[lang][key];
@@ -144,20 +121,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (translations[lang] && translations[lang][key]) elem.placeholder = translations[lang][key];
         });
         document.querySelectorAll('.language-options').forEach(options => options.style.display = 'none');
-        
         const headlineText = translations[lang]['hero_title'];
         typeWriter(typingHeadline, headlineText);
-
         if (window.Tawk_API && window.Tawk_API.setAttributes) { window.Tawk_API.setAttributes({ 'language': lang }, () => {}); }
     }
 
     // --- Hamburger Menu Logic ---
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
-    const links = document.querySelectorAll('.nav-links li');
     hamburger.addEventListener('click', () => {
         navLinks.classList.toggle('nav-active');
-        links.forEach((link, index) => {
+        document.querySelectorAll('.nav-links li').forEach((link, index) => {
             if (link.style.animation) { link.style.animation = '' } 
             else { link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`; }
         });
@@ -166,20 +140,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Back to Top Button Logic ---
     const backToTopBtn = document.getElementById('back-to-top-btn');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-            backToTopBtn.classList.add('visible');
-        } else {
-            backToTopBtn.classList.remove('visible');
-        }
-    });
+    if(backToTopBtn){
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+    }
 
     // --- Sliders & Carousels ---
-    const aboutSliderDotsContainer = document.querySelector('.about-container .slider-dots');
-    const aboutImages = document.querySelectorAll('.about-container .slider-img');
+    const aboutSliderDotsContainer = document.querySelector('.about-slider-new .slider-dots');
+    const aboutImages = document.querySelectorAll('.about-slider-new .slider-img');
     if (aboutSliderDotsContainer && aboutImages.length > 0) {
         aboutImages.forEach((_, i) => { const dot = document.createElement('span'); dot.classList.add('dot'); dot.dataset.index = i; if (i === 0) dot.classList.add('active'); aboutSliderDotsContainer.appendChild(dot); });
-        const aboutDots = document.querySelectorAll('.about-container .dot'); let currentAboutIndex = 0;
+        const aboutDots = document.querySelectorAll('.about-slider-new .dot'); let currentAboutIndex = 0;
         let aboutSliderInterval = setInterval(() => { currentAboutIndex = (currentAboutIndex + 1) % aboutImages.length; updateAboutSlider(currentAboutIndex); }, 4000);
         function updateAboutSlider(index) { currentAboutIndex = index; aboutImages.forEach(img => img.classList.remove('active')); aboutImages[index].classList.add('active'); aboutDots.forEach(d => d.classList.remove('active')); aboutDots[index].classList.add('active'); }
         aboutDots.forEach(dot => { dot.addEventListener('click', (e) => { const index = parseInt(e.target.dataset.index); updateAboutSlider(index); clearInterval(aboutSliderInterval); aboutSliderInterval = setInterval(() => { currentAboutIndex = (currentAboutIndex + 1) % aboutImages.length; updateAboutSlider(currentAboutIndex); }, 6000); }); });
@@ -215,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.2 });
     
     document.querySelectorAll('.animate-on-scroll, .stat-number').forEach(element => { observer.observe(element); });
 
