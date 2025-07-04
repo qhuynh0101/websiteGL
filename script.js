@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             process3_title: "Thực Thi", process3_desc: "Đội ngũ chuyên nghiệp của chúng tôi thực thi kế hoạch một cách hoàn hảo với thiết bị và sản phẩm hàng đầu.",
             process4_title: "Kiểm Tra Chất Lượng", process4_desc: "Chúng tôi tiến hành kiểm tra chất lượng định kỳ và lắng nghe phản hồi để đảm bảo sự hài lòng 100%.",
             about_title: "Cam Kết Về Sự Ưu Việt",
-            about_desc: "Được thành lập dựa trên các nguyên tắc về sự tin cậy, Evergreen Sạch chuyên cung cấp dịch vụ vệ sinh thương mại hàng đầu. Chúng tôi tin rằng một văn phòng sạch sẽ là nền tảng của một doanh nghiệp thành công và cam kết giúp bạn đạt được điều đó.",
+            about_desc: "Được thành lập dựa trên các nguyên tắc về sự tin cậy, Evergreen Sạch cung cấp dịch vụ vệ sinh thương mại hàng đầu. Chúng tôi tin rằng một văn phòng sạch sẽ là nền tảng của một doanh nghiệp thành công và cam kết giúp bạn đạt được điều đó.",
             testimonials_title: "Được Các Công Ty Hàng Đầu Tin Tưởng",
             testimonial1_text: `"Đội ngũ tại Evergreen rất chuyên nghiệp, đáng tin cậy và cực kỳ kỹ lưỡng. Văn phòng của chúng tôi chưa bao giờ sạch đẹp hơn thế. Rất khuyến khích!"`,
             testimonial1_author: "- Sarah L., Giám đốc điều hành Innovate Inc.",
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             featured_tag: "Tiêu biểu",
             contact_title: "Liên Hệ Với Chúng Tôi",
             form_name: "Họ và Tên", form_email: "Địa chỉ Email Công ty", form_message: "Vui lòng mô tả yêu cầu vệ sinh của bạn...", form_submit: "Gửi Yêu Cầu",
-            footer_text: "© 2025 Evergreen Commercial Cleaning. Bản quyền đã được bảo hộ."
+            footer_text: "© 2025 Evergreen Commercial Cleaning. Một Tiêu Chuẩn Sạch Cao Hơn."
         },
         ko: {
             logo_text: "에버그린 클린",
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
             process3_title: "실행", process3_desc: "훈련된 전문가들이 최고 수준의 장비와 제품을 사용하여 계획을 완벽하게 실행합니다.",
             process4_title: "품질 검사", process4_desc: "100% 만족을 보장하기 위해 정기적인 품질 검사를 수행하고 귀하의 피드백을 구합니다.",
             about_title: "우수성을 향한 우리의 약속",
-            about_desc: "신뢰와 믿음의 원칙을 바탕으로 설립된 에버그린 클린은 최고 수준의 상업용 청소 서비스를 제공하기 위해 최선을 다하고 있습니다. 우리는 깨끗한 사무실이 성공적인 비즈니스의 기초라고 믿으며, 전문적이고 원활한 경험으로 이를 달성할 수 있도록 돕기 위해 최선을 다하고 있습니다.",
+            about_desc: "신뢰와 믿음의 원칙을 바탕으로 설립된 에버그린 클린은 최고 수준의 상업용 청소 서비스를 제공합니다. 우리는 깨끗한 사무실이 성공적인 비즈니스의 기초라고 믿으며, 전문적이고 원활한 경험으로 이를 달성할 수 있도록 돕기 위해 최선을 다하고 있습니다.",
             testimonials_title: "최고 기업들의 신뢰",
             testimonial1_text: `"에버그린 팀은 전문적이고 신뢰할 수 있으며 믿을 수 없을 정도로 철저합니다. 우리 사무실이 이렇게 좋아 보인 적이 없었습니다. 적극 추천합니다!"`,
             testimonial1_author: "- 사라 L., Innovate Inc. CEO",
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
             featured_tag: "推荐",
             contact_title: "联系我们",
             form_name: "您的全名", form_email: "公司邮箱地址", form_message: "请描述您的清洁要求...", form_submit: "发送您的查询",
-            footer_text: "© 2025 长青商业清洁。版权所有。"
+            footer_text: "© 2025 长青商业清洁。更高标准的清洁。"
         },
         es: {
             logo_text: "Limpieza Evergreen",
@@ -151,6 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- ## DYNAMIC CONTENT POPULATION ## ---
+    // This allows easy updates without touching HTML
     const servicesData = [
         { icon: '🧹', title_key: 'service1_title', desc_key: 'service1_desc' },
         { icon: '✨', title_key: 'service2_title', desc_key: 'service2_desc' },
@@ -164,53 +165,39 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     
     const servicesContainer = document.querySelector('.services-container');
-    if (servicesContainer) {
-        servicesContainer.innerHTML = servicesData.map(s => `
-            <div class="service-card animate-on-scroll">
-                <div class="service-icon">${s.icon}</div>
-                <h3 data-key="${s.title_key}"></h3>
-                <p data-key="${s.desc_key}"></p>
-            </div>
-        `).join('');
-    }
-    
+    servicesContainer.innerHTML = servicesData.map(s => `
+        <div class="service-card animate-on-scroll">
+            <div class="service-icon">${s.icon}</div>
+            <h3 data-key="${s.title_key}"></h3>
+            <p data-key="${s.desc_key}"></p>
+        </div>
+    `).join('');
+
     const testimonialTrack = document.querySelector('.testimonial-carousel-track');
-    if (testimonialTrack) {
-        testimonialTrack.innerHTML = testimonialsData.map(t => `
-            <div class="testimonial-card">
-                <div class="testimonial-header">
-                    <div class="star-rating">${'★'.repeat(t.stars)}${'☆'.repeat(5 - t.stars)}</div>
-                    ${t.featured ? `<div class="featured-tag" data-key="featured_tag"></div>` : ''}
-                </div>
-                <p class="testimonial-text" data-key="${t.text_key}"></p>
-                <p class="testimonial-author" data-key="${t.author_key}"></p>
+    testimonialTrack.innerHTML = testimonialsData.map(t => `
+        <div class="testimonial-card">
+            <div class="testimonial-header">
+                <div class="star-rating">${'★'.repeat(t.stars)}${'☆'.repeat(5 - t.stars)}</div>
+                ${t.featured ? `<div class="featured-tag" data-key="featured_tag"></div>` : ''}
             </div>
-        `).join('');
-    }
+            <p class="testimonial-text" data-key="${t.text_key}"></p>
+            <p class="testimonial-author" data-key="${t.author_key}"></p>
+        </div>
+    `).join('');
+    
+    const contactSection = document.getElementById('contact');
+    contactSection.innerHTML = `
+        <h2 class="section-title animate-on-scroll" data-key="contact_title"></h2>
+        <form class="contact-form animate-on-scroll">
+            <input type="text" name="name" data-key-placeholder="form_name">
+            <input type="email" name="email" data-key-placeholder="form_email">
+            <textarea name="message" rows="5" data-key-placeholder="form_message"></textarea>
+            <button type="submit" class="cta-button" data-key="form_submit"></button>
+        </form>
+    `;
+
 
     // --- ## CORE LOGIC & ANIMATIONS ## ---
-
-    // --- Hamburger Menu Logic ---
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    const links = document.querySelectorAll('.nav-links li');
-
-    hamburger.addEventListener('click', () => {
-        // Toggle Nav
-        navLinks.classList.toggle('nav-active');
-
-        // Animate Links
-        links.forEach((link, index) => {
-            if (link.style.animation) {
-                link.style.animation = ''
-            } else {
-                link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
-            }
-        });
-        // Hamburger Animation
-        hamburger.classList.toggle('toggle');
-    });
-
 
     // --- Language Dropdown Logic ---
     const langDropdown = document.querySelector('.language-dropdown');
@@ -222,13 +209,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', () => langOptions.style.display = 'none');
     
     window.setLanguage = function(lang) {
-        if (!translations[lang]) lang = 'en'; // Fallback to English
-        
+        if (!translations[lang]) lang = 'en';
         document.documentElement.lang = lang;
         const selectedLangText = document.getElementById('selected-lang-text');
         const langName = langOptions.querySelector(`a[onclick="setLanguage('${lang}')"]`).textContent;
         selectedLangText.textContent = langName;
-
         document.querySelectorAll('[data-key]').forEach(elem => {
             const key = elem.getAttribute('data-key');
             if (translations[lang][key]) elem.innerHTML = translations[lang][key];
@@ -238,82 +223,63 @@ document.addEventListener('DOMContentLoaded', () => {
             if (translations[lang][key]) elem.placeholder = translations[lang][key];
         });
         langOptions.style.display = 'none';
-
-        // Tawk.to Language Sync
-        if (window.Tawk_API && window.Tawk_API.setAttributes) {
-            window.Tawk_API.setAttributes({
-                'language': lang,
-            }, function(error){
-                if (error) {
-                    console.error('Lỗi khi đổi ngôn ngữ Tawk.to:', error);
-                }
-            });
-        }
-    }
-
-    // --- About Us Auto-Slider Logic ---
-    const aboutSliderDotsContainer = document.querySelector('.about-container .slider-dots');
-    const aboutImages = document.querySelectorAll('.about-container .slider-img');
-    if (aboutSliderDotsContainer && aboutImages.length > 0) {
-        aboutImages.forEach((_, i) => {
-            const dot = document.createElement('span');
-            dot.classList.add('dot');
-            dot.dataset.index = i;
-            if (i === 0) dot.classList.add('active');
-            aboutSliderDotsContainer.appendChild(dot);
-        });
-        
-        const aboutDots = document.querySelectorAll('.about-container .dot');
-        let currentAboutIndex = 0;
-        let aboutSliderInterval = setInterval(nextAboutSlide, 4000);
-
-        function nextAboutSlide() {
-            currentAboutIndex = (currentAboutIndex + 1) % aboutImages.length;
-            updateAboutSlider(currentAboutIndex);
-        }
-        
-        function updateAboutSlider(index) {
-            currentAboutIndex = index;
-            aboutImages.forEach(img => img.classList.remove('active'));
-            aboutImages[index].classList.add('active');
-            aboutDots.forEach(d => d.classList.remove('active'));
-            aboutDots[index].classList.add('active');
-        }
-
-        aboutDots.forEach(dot => {
-            dot.addEventListener('click', (e) => {
-                const index = parseInt(e.target.getAttribute('data-index'));
-                updateAboutSlider(index);
-                clearInterval(aboutSliderInterval);
-                aboutSliderInterval = setInterval(nextAboutSlide, 6000); // Reset interval on manual click
-            });
-        });
     }
 
     // --- Hero Slider Logic ---
     const heroSlides = document.querySelectorAll('.hero-slide');
-    if (heroSlides.length > 0) {
-        let currentHeroSlide = 0;
-        setInterval(() => {
-            heroSlides[currentHeroSlide].classList.remove('active');
-            currentHeroSlide = (currentHeroSlide + 1) % heroSlides.length;
-            heroSlides[currentHeroSlide].classList.add('active');
-        }, 5000);
+    let currentHeroSlide = 0;
+    setInterval(() => {
+        heroSlides[currentHeroSlide].classList.remove('active');
+        currentHeroSlide = (currentHeroSlide + 1) % heroSlides.length;
+        heroSlides[currentHeroSlide].classList.add('active');
+    }, 5000);
+
+    // --- About Us Auto-Slider Logic ---
+    const aboutSliderDotsContainer = document.querySelector('.about-container .slider-dots');
+    const aboutImages = document.querySelectorAll('.about-container .slider-img');
+    aboutImages.forEach((_, i) => {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        dot.dataset.index = i;
+        if (i === 0) dot.classList.add('active');
+        aboutSliderDotsContainer.appendChild(dot);
+    });
+    
+    const aboutDots = document.querySelectorAll('.about-container .dot');
+    let currentAboutIndex = 0;
+    let aboutSliderInterval = setInterval(nextAboutSlide, 4000);
+
+    function nextAboutSlide() {
+        currentAboutIndex = (currentAboutIndex + 1) % aboutImages.length;
+        updateAboutSlider(currentAboutIndex);
     }
     
+    function updateAboutSlider(index) {
+        currentAboutIndex = index;
+        aboutImages.forEach(img => img.classList.remove('active'));
+        aboutImages[index].classList.add('active');
+        aboutDots.forEach(d => d.classList.remove('active'));
+        aboutDots[index].classList.add('active');
+    }
+
+    aboutDots.forEach(dot => {
+        dot.addEventListener('click', (e) => {
+            const index = parseInt(e.target.getAttribute('data-index'));
+            updateAboutSlider(index);
+            clearInterval(aboutSliderInterval);
+            aboutSliderInterval = setInterval(nextAboutSlide, 6000); // Reset interval on manual click
+        });
+    });
+
     // --- Testimonial Carousel Logic ---
     const testimonialTrackEl = document.querySelector('.testimonial-carousel-track');
-    if (testimonialTrackEl) {
-        const testimonialCards = testimonialTrackEl.children;
-        if (testimonialCards.length > 0) {
-            let testimonialIndex = 0;
-            setInterval(() => {
-                testimonialIndex = (testimonialIndex + 1) % testimonialCards.length;
-                testimonialTrackEl.style.transform = `translateX(-${testimonialIndex * 100}%)`;
-            }, 6000);
-        }
-    }
-    
+    const testimonialCards = document.querySelectorAll('.testimonial-card');
+    let testimonialIndex = 0;
+    setInterval(() => {
+        testimonialIndex = (testimonialIndex + 1) % testimonialCards.length;
+        testimonialTrackEl.style.transform = `translateX(-${testimonialIndex * 100}%)`;
+    }, 6000);
+
     // --- Animation on Scroll Logic ---
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -322,9 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.animate-on-scroll').forEach(element => {
-        observer.observe(element);
-    });
+    document.querySelectorAll('.animate-on-scroll').forEach(element => observer.observe(element));
 
     // --- ## INITIAL PAGE SETUP ## ---
     setLanguage('en'); // Set default language on load
