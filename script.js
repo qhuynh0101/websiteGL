@@ -31,11 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
             form_name: "Your Full Name", form_email: "Company Email Address", form_message: "Please describe your cleaning requirements...", form_submit: "Send Your Inquiry",
             footer_text: "© 2025 Evergreen Commercial Cleaning. A Higher Standard of Clean."
         },
-        // Thêm các ngôn ngữ khác ở đây...
         vi: {
             logo_text: "Evergreen Sạch",
             nav_home: "Trang Chủ", nav_services: "Dịch Vụ", nav_process: "Quy Trình", nav_about: "Về Chúng Tôi", nav_testimonials: "Đánh Giá", nav_contact: "Liên Hệ",
-            hero_title: "Tiêu Chuẩn Vàng Trong Vệ Sinh Thương Mại",
+            hero_title: "Tiêu Chuẩn Vàng Vệ Sinh Thương Mại",
             hero_subtitle: "Chúng tôi không chỉ mang đến một không gian làm việc sạch sẽ. Chúng tôi tạo ra một môi trường trong lành, lành mạnh và hiệu quả, phản ánh chất lượng thương hiệu của bạn. Tỉ mỉ, đáng tin cậy và luôn đúng tiến độ.",
             hero_cta: "Yêu Cầu Báo Giá Cao Cấp",
             services_title: "Dịch Vụ Cao Cấp Của Chúng Tôi",
@@ -61,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             form_name: "Họ và Tên", form_email: "Địa chỉ Email Công ty", form_message: "Vui lòng mô tả yêu cầu vệ sinh của bạn...", form_submit: "Gửi Yêu Cầu",
             footer_text: "© 2025 Evergreen Commercial Cleaning. Một Tiêu Chuẩn Sạch Cao Hơn."
         },
+        // Thêm các ngôn ngữ khác nếu cần
     };
 
     // --- ## DYNAMIC CONTENT POPULATION ## ---
@@ -85,30 +85,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ## CORE LOGIC & ANIMATIONS ## ---
     
-    // --- Logic cho hiệu ứng gõ chữ ---
+    // --- Typing Effect Logic ---
     const typingHeadline = document.getElementById('typing-headline');
     function typeWriter(element, text, i = 0) {
         if (!element) return;
+        if (i === 0) { element.innerHTML = ''; } // Xóa nội dung cũ trước khi gõ
         element.innerHTML = text.substring(0, i) + '<span aria-hidden="true">|</span>';
         if (i < text.length) {
             setTimeout(() => typeWriter(element, text, i + 1), 70);
         } else {
-             // Ẩn con trỏ sau khi gõ xong
-            element.querySelector('span').style.display = 'none';
+             element.querySelector('span').style.display = 'none';
         }
     }
 
-    // --- Logic cho các hiệu ứng khác ---
-    const langDropdown = document.querySelector('.language-dropdown');
-    const langOptions = document.querySelector('.language-options');
-    langDropdown.addEventListener('click', e => { e.stopPropagation(); langOptions.style.display = langOptions.style.display === 'block' ? 'none' : 'block'; });
-    document.addEventListener('click', () => { langOptions.style.display = 'none'; });
+    // --- Language Switcher Logic ---
+    const langDropdownContainer = document.querySelector('.language-dropdown');
+    const langDropdownMobileContainer = document.querySelector('.language-dropdown-mobile');
+    
+    // Sao chép dropdown ngôn ngữ vào trong menu di động
+    if (langDropdownContainer && langDropdownMobileContainer) {
+         langDropdownMobileContainer.appendChild(langDropdownContainer.cloneNode(true));
+    }
+
+    function setupLangSwitcher(container) {
+        const langDropdown = container.querySelector('.language-dropdown');
+        if (!langDropdown) return;
+        
+        const langOptions = langDropdown.querySelector('.language-options');
+        const langButton = langDropdown.querySelector('.language-selected');
+
+        langButton.addEventListener('click', e => { 
+            e.stopPropagation(); 
+            langOptions.style.display = langOptions.style.display === 'block' ? 'none' : 'block';
+        });
+    }
+
+    document.querySelectorAll('.language-dropdown').forEach(setupLangSwitcher);
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.language-options').forEach(options => options.style.display = 'none');
+    });
+    
     window.setLanguage = function(lang) {
         if (!translations[lang]) lang = 'en';
         document.documentElement.lang = lang;
-        const selectedLangText = document.getElementById('selected-lang-text');
-        const langName = langOptions.querySelector(`a[onclick="setLanguage('${lang}')"]`).textContent;
-        selectedLangText.textContent = langName;
+        
+        document.querySelectorAll('.language-selected span').forEach(span => {
+            const langName = translations[lang]['nav_home'] ? lang.toUpperCase() : 'English'; // Lấy tên ngôn ngữ hoặc mặc định
+             const langNameMap = { 'en': 'English', 'vi': 'Tiếng Việt', 'ko': '한국어', 'zh': '中文', 'es': 'Español'};
+             span.textContent = langNameMap[lang] || 'English';
+        });
+
         document.querySelectorAll('[data-key]').forEach(elem => {
             const key = elem.getAttribute('data-key');
             if (translations[lang] && translations[lang][key]) elem.innerHTML = translations[lang][key];
@@ -117,9 +143,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const key = elem.getAttribute('data-key-placeholder');
             if (translations[lang] && translations[lang][key]) elem.placeholder = translations[lang][key];
         });
-        langOptions.style.display = 'none';
+        document.querySelectorAll('.language-options').forEach(options => options.style.display = 'none');
         
-        // Chạy lại hiệu ứng gõ chữ với ngôn ngữ mới
         const headlineText = translations[lang]['hero_title'];
         typeWriter(typingHeadline, headlineText);
 
@@ -139,21 +164,25 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburger.classList.toggle('toggle');
     });
 
-    // --- Slider & Carousel Logic ---
+    // --- Back to Top Button Logic ---
+    const backToTopBtn = document.getElementById('back-to-top-btn');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    });
+
+    // --- Sliders & Carousels ---
     const aboutSliderDotsContainer = document.querySelector('.about-container .slider-dots');
     const aboutImages = document.querySelectorAll('.about-container .slider-img');
     if (aboutSliderDotsContainer && aboutImages.length > 0) {
-        aboutImages.forEach((_, i) => {
-            const dot = document.createElement('span'); dot.classList.add('dot'); dot.dataset.index = i; if (i === 0) dot.classList.add('active'); aboutSliderDotsContainer.appendChild(dot);
-        });
+        aboutImages.forEach((_, i) => { const dot = document.createElement('span'); dot.classList.add('dot'); dot.dataset.index = i; if (i === 0) dot.classList.add('active'); aboutSliderDotsContainer.appendChild(dot); });
         const aboutDots = document.querySelectorAll('.about-container .dot'); let currentAboutIndex = 0;
         let aboutSliderInterval = setInterval(() => { currentAboutIndex = (currentAboutIndex + 1) % aboutImages.length; updateAboutSlider(currentAboutIndex); }, 4000);
-        function updateAboutSlider(index) {
-            currentAboutIndex = index; aboutImages.forEach(img => img.classList.remove('active')); aboutImages[index].classList.add('active'); aboutDots.forEach(d => d.classList.remove('active')); aboutDots[index].classList.add('active');
-        }
-        aboutDots.forEach(dot => {
-            dot.addEventListener('click', (e) => { const index = parseInt(e.target.dataset.index); updateAboutSlider(index); clearInterval(aboutSliderInterval); aboutSliderInterval = setInterval(() => { currentAboutIndex = (currentAboutIndex + 1) % aboutImages.length; updateAboutSlider(currentAboutIndex); }, 6000); });
-        });
+        function updateAboutSlider(index) { currentAboutIndex = index; aboutImages.forEach(img => img.classList.remove('active')); aboutImages[index].classList.add('active'); aboutDots.forEach(d => d.classList.remove('active')); aboutDots[index].classList.add('active'); }
+        aboutDots.forEach(dot => { dot.addEventListener('click', (e) => { const index = parseInt(e.target.dataset.index); updateAboutSlider(index); clearInterval(aboutSliderInterval); aboutSliderInterval = setInterval(() => { currentAboutIndex = (currentAboutIndex + 1) % aboutImages.length; updateAboutSlider(currentAboutIndex); }, 6000); }); });
     }
     const heroSlides = document.querySelectorAll('.hero-slide');
     if (heroSlides.length > 0) { let currentHeroSlide = 0; setInterval(() => { heroSlides[currentHeroSlide].classList.remove('active'); currentHeroSlide = (currentHeroSlide + 1) % heroSlides.length; heroSlides[currentHeroSlide].classList.add('active'); }, 5000); }
@@ -165,30 +194,31 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                // Logic cho hiệu ứng đếm số
-                if (entry.target.classList.contains('stat-number')) {
+                if (entry.target.classList.contains('stat-number') && !entry.target.classList.contains('counted')) {
                     const counter = entry.target;
                     const target = +counter.getAttribute('data-target');
-                    const duration = 2000; // 2 giây
-                    const stepTime = Math.abs(Math.floor(duration / target));
-                    let currentNumber = 0;
+                    const duration = 2000;
+                    let start = 0;
+                    const stepTime = 10;
+                    const totalSteps = duration / stepTime;
+                    const increment = target / totalSteps;
                     const timer = setInterval(() => {
-                        currentNumber += 1;
-                        counter.innerText = currentNumber;
-                        if (currentNumber == target) {
+                        start += increment;
+                        if (start >= target) {
+                            counter.innerText = target;
                             clearInterval(timer);
+                        } else {
+                            counter.innerText = Math.ceil(start);
                         }
                     }, stepTime);
-                    observer.unobserve(counter); // Chạy 1 lần duy nhất
+                    counter.classList.add('counted');
                 }
             }
         });
-    }, { threshold: 0.5 }); // Bắt đầu khi thấy 50% phần tử
+    }, { threshold: 0.5 });
     
-    document.querySelectorAll('.animate-on-scroll').forEach(element => { observer.observe(element); });
-    document.querySelectorAll('.stat-number').forEach(element => { observer.observe(element); });
+    document.querySelectorAll('.animate-on-scroll, .stat-number').forEach(element => { observer.observe(element); });
 
     // --- ## INITIAL PAGE SETUP ## ---
     setLanguage('en');
 });
-
