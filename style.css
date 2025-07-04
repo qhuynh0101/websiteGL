@@ -125,6 +125,7 @@ nav { display: flex; justify-content: space-between; align-items: center; paddin
 footer { background: var(--dark-color); color: #ecf0f1; text-align: center; padding: 2rem; }
 
 /* --- Live Chat Widget --- */
+/*
 #live-chat-widget {
     position: fixed; bottom: 20px; right: 20px;
     z-index: 1000; cursor: pointer;
@@ -137,7 +138,77 @@ footer { background: var(--dark-color); color: #ecf0f1; text-align: center; padd
     transition: transform 0.3s;
 }
 #live-chat-widget:hover .chat-icon { transform: scale(1.1); }
-
+*/
 /* --- Animation on Scroll --- */
 .animate-on-scroll { opacity: 0; transform: translateY(50px); transition: opacity 1s ease-out, transform 1s ease-out; }
 .animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
+
+
+/* =============================================== */
+/* === CODE CSS CHO THIẾT BỊ DI ĐỘNG (RESPONSIVE) === */
+/* =============================================== */
+
+@media (max-width: 768px) {
+
+    /* --- Sửa lỗi cho menu trên di động --- */
+    nav {
+        flex-direction: column; /* Cho logo và menu xếp chồng lên nhau */
+        gap: 1rem;
+    }
+
+    .nav-links {
+        flex-direction: column; /* Cho các mục trong menu xếp chồng */
+        text-align: center;
+        gap: 1rem;
+        width: 100%;
+        padding: 0;
+    }
+
+    .nav-links li {
+        margin: 0;
+    }
+
+    .language-dropdown {
+        margin-top: 1rem;
+    }
+
+    /* --- Thu nhỏ chữ và các khoảng trống --- */
+    .hero-content h1 {
+        font-size: 2.2rem; /* Giảm kích thước tiêu đề chính */
+    }
+    
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+
+    .content-section {
+        padding: 4rem 5%;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    /* --- Cho các cột xếp chồng lên nhau --- */
+    .process-container, 
+    .about-container {
+        flex-direction: column; /* Cho các mục xếp chồng lên nhau */
+        gap: 2rem;
+    }
+    
+    .about-text {
+        text-align: center;
+    }
+
+    .process-arrow {
+        transform: rotate(90deg); /* Xoay mũi tên xuống dưới */
+        margin: 0 auto;
+    }
+    
+    .about-text .section-title,
+    .about-text .section-title::after {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
